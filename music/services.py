@@ -1,10 +1,13 @@
 from ytmusicapi import YTMusic
 from yt_dlp import YoutubeDL
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
 ytmusic = YTMusic()
+
+YOUTUBE_ID_PATTERN = re.compile(r'^[A-Za-z0-9_-]{11}$')
 
 
 def get_home():
@@ -37,6 +40,8 @@ def search(query, filter_songs=False, limit=20):
 
 
 def get_song_stream_url(video_id):
+    if not YOUTUBE_ID_PATTERN.match(video_id):
+        raise ValueError(f"Invalid YouTube video ID: {video_id}")
     url = f"https://www.youtube.com/watch?v={video_id}"
     ydl_opts = {
         "format": "bestaudio/best",

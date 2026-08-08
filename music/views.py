@@ -20,12 +20,16 @@ from .serializers import (
     StreamUrlSerializer,
 )
 from ytmusicapi import YTMusic
+import logging
+
+logger = logging.getLogger(__name__)
 
 ytmusic = YTMusic()
 
 
 class HomeAPIView(APIView):
     def get(self, request):
+        logger.info("HomeAPIView called: path=%s method=%s", request.path, request.method)
         try:
             data = get_home()
             return Response({"results": data}, status=status.HTTP_200_OK)
@@ -35,6 +39,7 @@ class HomeAPIView(APIView):
 
 class PlaylistAPIView(APIView):
     def get(self, request, playlist_id):
+        logger.info("PlaylistAPIView called: path=%s method=%s playlist_id=%s", request.path, request.method, playlist_id)
         try:
             data = get_playlist(playlist_id)
             serializer = PlaylistSerializer(data)
@@ -45,6 +50,7 @@ class PlaylistAPIView(APIView):
 
 class AlbumAPIView(APIView):
     def get(self, request, album_id):
+        logger.info("AlbumAPIView called: path=%s method=%s album_id=%s", request.path, request.method, album_id)
         try:
             data = get_album(album_id)
             serializer = AlbumSerializer(data)
@@ -55,6 +61,7 @@ class AlbumAPIView(APIView):
 
 class ArtistAPIView(APIView):
     def get(self, request, artist_id):
+        logger.info("ArtistAPIView called: path=%s method=%s artist_id=%s", request.path, request.method, artist_id)
         try:
             data = get_artist(artist_id)
             serializer = ArtistSerializer(data)
@@ -65,6 +72,7 @@ class ArtistAPIView(APIView):
 
 class GenreAPIView(APIView):
     def get(self, request, genre_name=None):
+        logger.info("GenreAPIView called: path=%s method=%s genre_name=%s", request.path, request.method, genre_name)
         try:
             if genre_name:
                 categories = get_mood_categories()
@@ -91,6 +99,7 @@ class GenreAPIView(APIView):
 
 class PopAPIView(APIView):
     def get(self, request):
+        logger.info("PopAPIView called: path=%s method=%s", request.path, request.method)
         try:
             data = get_charts()
             return Response({"results": data}, status=status.HTTP_200_OK)
@@ -100,6 +109,7 @@ class PopAPIView(APIView):
 
 class SearchAPIView(APIView):
     def get(self, request):
+        logger.info("SearchAPIView called: path=%s method=%s query=%s", request.path, request.method, request.query_params.get("q", ""))
         query = request.query_params.get("q", "")
         if not query:
             return Response({"error": "Query parameter 'q' is required"}, status=status.HTTP_400_BAD_REQUEST)
@@ -109,14 +119,20 @@ class SearchAPIView(APIView):
             serializer = SearchResultSerializer(results, many=True)
             return Response({"results": serializer.data}, status=status.HTTP_200_OK)
         except Exception as e:
+            logger.error("SearchAPIView error: %s", str(e))
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class StreamURLAPIView(APIView):
     def get(self, request, video_id):
+        logger.info("StreamURLAPIView called: path=%s method=%s video_id=%s", request.path, request.method, video_id)
         try:
             data = get_song_stream_url(video_id)
             serializer = StreamUrlSerializer(data)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        except ValueError as e:
+            logger.error("StreamURLAPIView validation error: %s", str(e))
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            logger.error("StreamURLAPIView error: %s", str(e))
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
