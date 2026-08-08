@@ -1,6 +1,29 @@
 from rest_framework import serializers
 
 
+def pick_thumbnail(thumbnails, video_id=None):
+    if video_id:
+        return f"https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg"
+    if thumbnails and isinstance(thumbnails, list) and len(thumbnails) > 0:
+        last = thumbnails[-1]
+        if isinstance(last, dict) and last.get("url"):
+            return last["url"]
+    return None
+
+
+def normalize_track(item):
+    video_id = item.get("videoId") or item.get("video_id")
+    return {
+        "id": video_id,
+        "title": item.get("title", ""),
+        "video_id": video_id,
+        "artists": item.get("artists", []),
+        "album": item.get("album"),
+        "duration": item.get("duration"),
+        "thumbnail": pick_thumbnail(item.get("thumbnails"), video_id),
+    }
+
+
 class TrackSerializer(serializers.Serializer):
     id = serializers.CharField(required=False)
     title = serializers.CharField()

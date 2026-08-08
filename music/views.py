@@ -18,6 +18,7 @@ from .serializers import (
     HomeItemSerializer,
     SearchResultSerializer,
     StreamUrlSerializer,
+    normalize_track,
 )
 from ytmusicapi import YTMusic
 import logging
@@ -42,6 +43,8 @@ class PlaylistAPIView(APIView):
         logger.info("PlaylistAPIView called: path=%s method=%s playlist_id=%s", request.path, request.method, playlist_id)
         try:
             data = get_playlist(playlist_id)
+            if data.get("tracks"):
+                data["tracks"] = [normalize_track(t) for t in data["tracks"]]
             serializer = PlaylistSerializer(data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -53,6 +56,8 @@ class AlbumAPIView(APIView):
         logger.info("AlbumAPIView called: path=%s method=%s album_id=%s", request.path, request.method, album_id)
         try:
             data = get_album(album_id)
+            if data.get("tracks"):
+                data["tracks"] = [normalize_track(t) for t in data["tracks"]]
             serializer = AlbumSerializer(data)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
@@ -102,6 +107,8 @@ class PopAPIView(APIView):
         logger.info("PopAPIView called: path=%s method=%s", request.path, request.method)
         try:
             data = get_charts()
+            if data.get("videos"):
+                data["videos"] = [normalize_track(v) for v in data["videos"]]
             return Response({"results": data}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
