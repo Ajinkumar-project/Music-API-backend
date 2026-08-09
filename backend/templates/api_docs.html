@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YTMusic API Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; color: #333; }
+        .header { background: #1a1a2e; color: #fff; padding: 2rem; text-align: center; }
+        .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.8; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .endpoint { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .endpoint-header { display: flex; align-items: center; margin-bottom: 1rem; }
+        .method { padding: 0.25rem 0.75rem; border-radius: 4px; font-weight: bold; font-size: 0.85rem; margin-right: 1rem; }
+        .get { background: #61affe; color: #fff; }
+        .url { font-family: 'Courier New', monospace; font-size: 1.1rem; color: #1a1a2e; flex: 1; }
+        .description { color: #666; margin-bottom: 1rem; }
+        .params { background: #f8f9fa; padding: 1rem; border-radius: 4px; margin-bottom: 1rem; }
+        .params h4 { margin-bottom: 0.5rem; color: #1a1a2e; }
+        .param { display: flex; margin-bottom: 0.5rem; }
+        .param-name { font-family: 'Courier New', monospace; color: #e83e8c; width: 200px; }
+        .param-desc { color: #666; }
+        .response { background: #f8f9fa; padding: 1rem; border-radius: 4px; }
+        .response h4 { margin-bottom: 0.5rem; color: #1a1a2e; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem; }
+        .footer { text-align: center; padding: 2rem; color: #666; font-size: 0.9rem; }
+        .badge { display: inline-block; padding: 0.25rem 0.5rem; background: #e83e8c; color: #fff; border-radius: 4px; font-size: 0.75rem; margin-left: 0.5rem; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>YTMusic API Documentation</h1>
+        <p>Django REST Framework API for YouTube Music data via ytmusicapi and yt-dlp</p>
+    </div>
+
+    <div class="container">
+        <h2 style="margin-bottom: 1rem; color: #1a1a2e;">API Endpoints</h2>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/home/</span>
+            </div>
+            <div class="description">Fetch the YouTube Music home page data including featured playlists, new releases, and recommended content.</div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "results": [
+    {
+      "title": "India's biggest hits",
+      "contents": [...]
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/playlist/{playlist_id}/</span>
+            </div>
+            <div class="description">Fetch a playlist by its ID. Returns playlist details including title, description, thumbnail, and all tracks with video_id and high-quality thumbnails.</div>
+            <div class="params">
+                <h4>Path Parameters:</h4>
+                <div class="param">
+                    <span class="param-name">playlist_id</span>
+                    <span class="param-desc">YouTube Music playlist ID (e.g., RDCLAK5uy_krbBs7P2iEb30IODyVbiOXWyhZtAIX9Uk)</span>
+                </div>
+            </div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "id": "RDCLAK5uy_krbBs7P2iEb30IODyVbiOXWyhZtAIX9Uk",
+  "title": "Uncut Bollywood",
+  "description": "Enjoy stripped down versions...",
+  "thumbnail": "https://yt3.googleusercontent.com/...",
+  "tracks": [
+    {
+      "id": "GX9x62kFsVU",
+      "title": "Gehra Hua",
+      "video_id": "GX9x62kFsVU",
+      "artists": [{"name": "Arijit Singh", "id": "UCDxKh1gFWeYsqePvgVzmPoQ"}],
+      "duration": "3:51",
+      "thumbnail": "https://i.ytimg.com/vi/GX9x62kFsVU/maxresdefault.jpg"
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/album/{album_id}/</span>
+            </div>
+            <div class="description">Fetch an album by its browse ID. Returns album details including title, year, artists, and all tracks with video_id and high-quality thumbnails.</div>
+            <div class="params">
+                <h4>Path Parameters:</h4>
+                <div class="param">
+                    <span class="param-name">album_id</span>
+                    <span class="param-desc">YouTube Music album browse ID (e.g., MPREb_e9PRbX2AzDi)</span>
+                </div>
+            </div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "title": "Bass Test Subwoofer (Car Bass Test Extreme)",
+  "year": "2022",
+  "thumbnail": "https://yt3.googleusercontent.com/...",
+  "artists": [{"name": "Bass Test", "id": "UCowKeSiz5uaIG2XZiL-8E-w"}],
+  "tracks": [
+    {
+      "id": "NOYL3Onxx_8",
+      "title": "10 Hz Shifting 15 Hz Frequency Deep Bass",
+      "video_id": "NOYL3Onxx_8",
+      "artists": [{"name": "Bass Test", "id": "UCowKeSiz5uaIG2XZiL-8E-w"}],
+      "duration": "0:45",
+      "thumbnail": "https://i.ytimg.com/vi/NOYL3Onxx_8/maxresdefault.jpg"
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/artist/{artist_id}/</span>
+            </div>
+            <div class="description">Fetch an artist by their channel ID. Returns artist details including name, subscribers, description, thumbnails, songs, albums, singles, videos, and related artists.</div>
+            <div class="params">
+                <h4>Path Parameters:</h4>
+                <div class="param">
+                    <span class="param-name">artist_id</span>
+                    <span class="param-desc">YouTube Music artist channel ID (e.g., UCptBkLZ6XRxoyn8SkUMc_Iw)</span>
+                </div>
+            </div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "channel_id": "UCLH5ojAg1XIyxcOCazK4n-Q",
+  "name": "Alka Yagnik",
+  "subscribers": "2.19M",
+  "thumbnails": [...],
+  "description": "Alka Yagnik is an Indian playback singer...",
+  "views": "1,874,742,360 views",
+  "songs": {"browseId": "VLOLAK5uy_...", "results": [...]},
+  "albums": {"browseId": "MPADUCptBkLZ6XRxoyn8SkUMc_Iw", "results": [...]},
+  "singles": {...},
+  "videos": {...},
+  "related": [...]
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/genre/</span>
+            </div>
+            <div class="description">Fetch all available music genres and moods from YouTube Music. Returns categories like "Moods & moments" and "Genres".</div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "results": {
+    "Moods & moments": [
+      {"title": "Chill", "params": "ggMPOg1uX1JOQWZFeDByc2Jm"},
+      {"title": "Commute", "params": "ggMPOg1uX044Z2o5WERLckpU"}
+    ],
+    "Genres": [
+      {"title": "Pop", "params": "ggMPOg1uX1lLQkxHbHhWQUUy"},
+      {"title": "Rock", "params": "ggMPOg1uXzJKTm5jUEZ5Uzlu"}
+    ]
+  }
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/genre/{genre_name}/</span>
+            </div>
+            <div class="description">Fetch playlists for a specific genre or mood. Uses the genre name to find matching playlists from YouTube Music.</div>
+            <div class="params">
+                <h4>Path Parameters:</h4>
+                <div class="param">
+                    <span class="param-name">genre_name</span>
+                    <span class="param-desc">Genre or mood name (e.g., Pop, Rock, Chill, Party)</span>
+                </div>
+            </div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "results": [
+    {
+      "title": "Happy Pop Hits",
+      "playlistId": "RDCLAK5uy_mfdqvCAl8wodlx2P2_Ai2gNkiRDAufkkI",
+      "thumbnails": [...],
+      "description": "Playlist • YouTube Music"
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/pop/</span>
+            </div>
+            <div class="description">Fetch YouTube Music charts/popular data including top music videos, top artists, and trending content globally or by country.</div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "results": {
+    "countries": {"selected": {"text": "Global"}, "options": ["IN", "US", "GB", ...]},
+    "videos": [
+      {
+        "title": "Daily Top Music Videos - Global",
+        "playlistId": "PL4fGSI1pDJn6t3TXLGiiJdD-sZbrG3tG0",
+        "thumbnails": [...]
+      }
+    ],
+    "artists": [
+      {
+        "title": "Alka Yagnik",
+        "browseId": "UCptBkLZ6XRxoyn8SkUMc_Iw",
+        "subscribers": "2.19M",
+        "thumbnails": [...],
+        "rank": "1",
+        "trend": "neutral"
+      }
+    ]
+  }
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/search/?q={query}</span>
+            </div>
+            <div class="description">Search for songs on YouTube Music. Returns matching songs with video_id, artists, album, and thumbnail information.</div>
+            <div class="params">
+                <h4>Query Parameters:</h4>
+                <div class="param">
+                    <span class="param-name">q</span>
+                    <span class="param-desc">Search query string (e.g., "test", "bollywood", "rock")</span>
+                </div>
+            </div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "results": [
+    {
+      "title": "Bujwa Test",
+      "resultType": "song",
+      "videoId": "720a3bhOIvM",
+      "category": "Songs",
+      "artists": [{"name": "Magwe ZA", "id": "UCayIBGwL5RGNZvlrrrXkHhQ"}],
+      "album": {"name": "Bujwa Test", "id": "MPREb_62jleG8sLq6"}
+    }
+  ]
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/stream/{video_id}/</span>
+            </div>
+            <div class="description">Get the direct audio stream URL for a YouTube video using yt-dlp. Returns the best audio quality stream URL along with metadata.</div>
+            <div class="params">
+                <h4>Path Parameters:</h4>
+                <div class="param">
+                    <span class="param-name">video_id</span>
+                    <span class="param-desc">YouTube video ID (e.g., KHxrQgFBKeQ)</span>
+                </div>
+            </div>
+            <div class="response">
+                <h4>Response Example:</h4>
+                <pre>{
+  "url": "https://rr4---sn-25ge7nzr.googlevideo.com/videoplayback?...",
+  "title": "Kaan Check Sound Check",
+  "duration": 180,
+  "thumbnail": "https://i.ytimg.com/vi/KHxrQgFBKeQ/maxresdefault.jpg",
+  "ext": "mp4"
+}</pre>
+            </div>
+        </div>
+
+        <div class="endpoint">
+            <div class="endpoint-header">
+                <span class="method get">GET</span>
+                <span class="url">/api/docs/</span>
+                <span class="badge">This Page</span>
+            </div>
+            <div class="description">View this API documentation page with details about all available endpoints, parameters, and response formats.</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>YTMusic API - Built with Django REST Framework, ytmusicapi, and yt-dlp</p>
+    </div>
+</body>
+</html>
