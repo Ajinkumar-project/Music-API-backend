@@ -9,8 +9,13 @@ from .views import (
     SearchAPIView,
     StreamURLAPIView,
 )
+from .auth_views import LoginView, RefreshTokenView, LogoutView, RegisterView
 
 urlpatterns = [
+    path("auth/login/", LoginView.as_view(), name="login"),
+    path("auth/refresh/", RefreshTokenView.as_view(), name="refresh"),
+    path("auth/logout/", LogoutView.as_view(), name="logout"),
+    path("auth/register/", RegisterView.as_view(), name="register"),
     path("home/", HomeAPIView.as_view(), name="home"),
     path("playlist/<str:playlist_id>/", PlaylistAPIView.as_view(), name="playlist"),
     path("album/<str:album_id>/", AlbumAPIView.as_view(), name="album"),

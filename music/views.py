@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from .services import (
     get_home,
     get_playlist,
@@ -29,6 +31,9 @@ ytmusic = YTMusic()
 
 
 class HomeAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         logger.info("HomeAPIView called: path=%s method=%s", request.path, request.method)
         try:
@@ -39,6 +44,9 @@ class HomeAPIView(APIView):
 
 
 class PlaylistAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, playlist_id):
         logger.info("PlaylistAPIView called: path=%s method=%s playlist_id=%s", request.path, request.method, playlist_id)
         try:
@@ -52,6 +60,9 @@ class PlaylistAPIView(APIView):
 
 
 class AlbumAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, album_id):
         logger.info("AlbumAPIView called: path=%s method=%s album_id=%s", request.path, request.method, album_id)
         try:
@@ -65,6 +76,9 @@ class AlbumAPIView(APIView):
 
 
 class ArtistAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, artist_id):
         logger.info("ArtistAPIView called: path=%s method=%s artist_id=%s", request.path, request.method, artist_id)
         try:
@@ -76,6 +90,9 @@ class ArtistAPIView(APIView):
 
 
 class GenreAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, genre_name=None):
         logger.info("GenreAPIView called: path=%s method=%s genre_name=%s", request.path, request.method, genre_name)
         try:
@@ -103,6 +120,9 @@ class GenreAPIView(APIView):
 
 
 class PopAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         logger.info("PopAPIView called: path=%s method=%s", request.path, request.method)
         try:
@@ -115,6 +135,9 @@ class PopAPIView(APIView):
 
 
 class SearchAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         logger.info("SearchAPIView called: path=%s method=%s query=%s", request.path, request.method, request.query_params.get("q", ""))
         query = request.query_params.get("q", "")
@@ -131,6 +154,9 @@ class SearchAPIView(APIView):
 
 
 class StreamURLAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, video_id):
         logger.info("StreamURLAPIView called: path=%s method=%s video_id=%s", request.path, request.method, video_id)
         try:
